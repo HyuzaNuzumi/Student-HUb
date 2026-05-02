@@ -1,8 +1,11 @@
 const express = require('express');
-const router = express.Router();
-const { registerValidation } = require('./authRoutes');
-const { register } = require('../controllers/authController');
+const authRoutes = require('./routes/authRoutes');
 
-router.post('/register', registerValidation, register);
+//middleware untuk parsing JSON
+app.use(express.json());
+
+//gunakan route untuk auth
+app.use('/api/auth', authRoutes);
+
 
 module.exports = router;
