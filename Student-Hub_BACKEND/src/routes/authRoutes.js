@@ -1,5 +1,8 @@
 const { body } = require('express-validator');
+const express = require('express');
 const constants = require('../constants/constants');
+const { register } = require('../controllers/authController');
+const router = express.Router();
 
 const registerValidation = [
     body('nim')
@@ -74,4 +77,6 @@ const registerValidation = [
         .escape(),        // amankan dari XSS
 ];
 
-module.exports = { registerValidation };
+router.post('/register', registerValidation, register);
+
+module.exports = router;
