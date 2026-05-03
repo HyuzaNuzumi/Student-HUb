@@ -1,5 +1,5 @@
 const { validationResult, matchedData } = require('express-validator');
-const prisma = require('../prisma/prisma');
+const prisma = require('../../prisma/prisma');
 const { hashPassword } = require('../utils/hashHelper');
 
 async function register(req, res){
@@ -47,7 +47,7 @@ async function register(req, res){
                 jurusan,
                 alamat,
                 jenis_kelamin,
-                tanggal_lahir
+                tanggal_lahir: new Date(tanggal_lahir)
             }
         })
         res.status(201).json({
@@ -67,3 +67,5 @@ async function register(req, res){
     }
     
 }
+
+module.exports = { register}
