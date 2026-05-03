@@ -1,5 +1,6 @@
 const express = require('express');
 const authRoutes = require('./routes/authRoutes');
+const app = express();
 
 //middleware untuk parsing JSON
 app.use(express.json());
@@ -8,4 +9,4 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 
 
-module.exports = router;
+module.exports = app;
