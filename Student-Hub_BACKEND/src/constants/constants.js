@@ -1,4 +1,3 @@
-// src/constants.js
 module.exports = {
     REGEX: {
         NIM: /^\d{9,10}$/,                       // 9-10 digit angka, dari awal sampai akhir
