@@ -1,7 +1,7 @@
 const { body } = require('express-validator');
 const express = require('express');
 const constants = require('../constants/constants');
-const { register } = require('../controllers/authController');
+const { register, login } = require('../controllers/authController');
 const router = express.Router();
 
 const registerValidation = [
@@ -77,6 +77,22 @@ const registerValidation = [
         .escape(),        // amankan dari XSS
 ];
 
+const loginValidation = [
+        body('nim')
+        .notEmpty().withMessage(constants.MESSAGES.NIM_REQUIRED)
+        .matches(constants.REGEX.NIM).withMessage(constants.MESSAGES.NIM_INVALID)
+        .trim(),
+            body('password')
+        .notEmpty().withMessage(constants.MESSAGES.PASSWORD_REQUIRED)
+        .isLength({ min: constants.VALIDATION.PASSWORD.MIN_LENGTH })
+            .withMessage(constants.MESSAGES.PASSWORD_MIN)
+        .isLength({ max: constants.VALIDATION.PASSWORD.MAX_LENGTH })
+            .withMessage(constants.MESSAGES.PASSWORD_MAX)
+        .matches(constants.REGEX.PASSWORD)
+            .withMessage(constants.MESSAGES.PASSWORD_PATTERN),
+];
+
 router.post('/register', registerValidation, register);
+router.post('/login',  loginValidation, login);
 
 module.exports = router;
