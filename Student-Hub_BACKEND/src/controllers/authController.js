@@ -1,6 +1,8 @@
 const { validationResult, matchedData } = require('express-validator');
 const prisma = require('../../prisma/prisma');
 const { hashPassword } = require('../utils/hashHelper');
+const { generateToken } = require('../utils/jwtHelper');
+const { verifyPassword } = require('../utils/hashHelper'); 
 
 async function register(req, res){
     try {
@@ -65,7 +67,65 @@ async function register(req, res){
             error: process.env.NODE_ENV === "development" ? error.message : undefined
         });
     }
-    
 }
 
-module.exports = { register}
+async function login(req, res){
+    try {
+        //validasi input login
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                errors: errors.array()
+            });
+        }
+
+        const { nim, password } = matchedData(req);
+
+        //mencari user berdasarkan nim
+        const user = await prisma.user.findUnique({
+            where: { nim }
+        });
+
+        if(!user){
+            return res.status(401).json({
+                message: 'NIM atau Password salah'
+            });
+        }
+
+        //verifikasi password
+        const isPasswordValid = await verifyPassword(password, user.password_hash);
+        if(!isPasswordValid){
+            return res.status(401).json({
+                message: 'NIM atau Password salah'
+            });
+        }
+
+        //generate JWT
+        const token = generateToken({
+            id: user.id,
+            nim: user.nim
+        })
+
+        res.status(200).json({
+            message: 'Login berhasil',
+            token,
+            user:{
+                id: user.id,
+                nim: user.nim,
+                nama: user.nama,
+            }
+        });
+    } catch(error){
+        console.error(error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan pada server'
+        });
+    }
+}
+
+
+
+module.exports = {
+     register,
+     login
+}
