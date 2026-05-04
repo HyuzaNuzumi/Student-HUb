@@ -13,7 +13,7 @@ function generateToken(payload){
     return token;
 }
 
-//fungsi untuk verifikasi toke JWT
+//fungsi untuk verifikasi token JWT
 function verifyToken(token){
     try {
         const tokenData = jwt.verify(token, JWT_SECRET);
