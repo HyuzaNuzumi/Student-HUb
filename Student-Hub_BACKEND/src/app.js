@@ -8,5 +8,6 @@ app.use(express.json());
 //gunakan route untuk auth
 app.use('/api/auth', authRoutes);
 
+//register 
 
 module.exports = app;
