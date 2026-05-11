@@ -9,7 +9,7 @@ app.use(express.json());
 //gunakan route untuk auth
 app.use('/api/auth', authRoutes);
 
-//route untuj profile
+//route untuk profile
 app.use('/api/profile', profileRoutes);
 
 
