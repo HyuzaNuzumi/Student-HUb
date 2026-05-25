@@ -73,8 +73,8 @@ const registerValidation = [
             .withMessage(constants.MESSAGES.JURUSAN_PATTERN)
         .isIn(constants.VALIDATION.JURUSAN.ALLOWED_VALUES)
             .withMessage(constants.MESSAGES.JURUSAN_INVALID)
-        .trim()           // hapus spasi di awal/akhir
-        .escape(),        // amankan dari XSS
+        .trim()      
+        .escape(),       
 ];
 
 const loginValidation = [
