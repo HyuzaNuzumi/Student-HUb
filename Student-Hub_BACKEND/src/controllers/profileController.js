@@ -20,23 +20,24 @@ async function getProfile(req, res){
                 alamat : true,
                 jenis_kelamin : true,
                 tanggal_lahir : true,
-                createdAt : true,
-                updatedAt : true
+                created_at: true,
+                updated_at: true
             },
         });
-        return res.status(200).json({
-            success: true,
-            message: "Profile retrieved successfully",
-            data: user
-        });
-
         if (!user){
             return res.status(404).json({
                 success : false,
                 message : "User not found"
             });
         }
+        return res.status(200).json({
+            success: true,
+            message: "Profile retrieved successfully",
+            data: user
+        });
+
     } catch (error){
+        console.error("ERRORR di getProfile: ", error);
         return res.status(500).json({
             success : false,
             message: "Kesalahan validasi atau server"
@@ -69,17 +70,16 @@ async function updateProfile(req, res){
         const updateUserProfile = await prisma.user.update({
             where: { nim: req.user.nim },
             data: {
-                nama : validData.nama,
-                jurusan : validData.jurusan,
-                alamat : validData.alamat,
-                jenis_kelamin : validData.jenis_kelamin,
-                tanggal_lahir : new Date(validData.tanggal_lahir)
+                nama : nama,
+                jurusan : jurusan,
+                alamat : alamat,
+                jenis_kelamin : jenis_kelamin,
+                tanggal_lahir : new Date(tanggal_lahir)
             }
         });
         return res.status(200).json({
             success: true,
             message: "Profile updated successfully",
-            data: updateUserProfile
         })
     } catch (error){
         return res.status(500).json({
