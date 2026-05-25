@@ -15,8 +15,8 @@ async function register(req, res){
                 errors: errors.array().map(err => ({
                     field: err.path,
                     message: err.msg
-                }))
-            })
+                })),
+            });
         }
     
         //pengambilan data yang sudah bersih
