@@ -82,7 +82,7 @@ const loginValidation = [
         .notEmpty().withMessage(constants.MESSAGES.NIM_REQUIRED)
         .matches(constants.REGEX.NIM).withMessage(constants.MESSAGES.NIM_INVALID)
         .trim(),
-            body('password')
+        body('password')
         .notEmpty().withMessage(constants.MESSAGES.PASSWORD_REQUIRED)
         .isLength({ min: constants.VALIDATION.PASSWORD.MIN_LENGTH })
             .withMessage(constants.MESSAGES.PASSWORD_MIN)
@@ -92,7 +92,33 @@ const loginValidation = [
             .withMessage(constants.MESSAGES.PASSWORD_PATTERN),
 ];
 
+const changePasswordValidation = [
+        body('passwordLama')
+        .notEmpty().withMessage(constants.MESSAGES.PASSWORD_LAMA_REQUIRED),
+        body('passwordBaru')
+        .notEmpty().withMessage(constants.MESSAGES.PASSWORD_BARU_REQUIRED)
+        .isLength({ min: constants.VALIDATION.PASSWORD_BARU.MIN_LENGTH }).withMessage(constants.MESSAGES.PASSWORD_BARU_MIN)
+        .isLength({ max: constants.VALIDATION.PASSWORD_BARU.MAX_LENGTH }).withMessage(constants.MESSAGES.PASSWORD_BARU_MAX)
+        .matches(constants.REGEX.PASSWORD).withMessage(constants.MESSAGES.PASSWORD_BARU_PATTERN)
+        .custom((value, {req}) =>{
+            //Memastikan password lama tidak sama dengan password baru
+            if(value === req.body.passwordLama){
+                throw new Error(constants.MESSAGES.KONFIRMASI_PASSWORD_NOT_MATCH)
+            }
+            return true;
+        }),
+        body('konfirmasiPassword')
+        .notEmpty().withMessage(config.MESSAGES.KONFIRMASI_PASSWORD_REQUIRED)
+        .custom((value, {req}) => {
+            if(value !== req.body.passwordBaru){
+                throw new Error(constants.MESSAGES.KONFIRMASI_PASSWORD_NOT_MATCH);
+            }
+            return true;
+        }),
+];
+
 router.post('/register', registerValidation, register);
 router.post('/login',  loginValidation, login);
+router.put('/change-password', changePasswordValidation)
 
 module.exports = router;
