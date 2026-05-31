@@ -17,6 +17,10 @@ module.exports = {
             MAX_LENGTH: 72,
             SALT_ROUNDS: 10
         },
+        PASSWORD_BARU: {
+            MIN_LENGTH: 6,
+            MAX_LENGTH: 72
+        },
         NAMA: {
             MIN_LENGTH: 3,
             MAX_LENGTH: 100
@@ -58,6 +62,20 @@ module.exports = {
         PASSWORD_MIN: 'Password minimal 6 karakter',
         PASSWORD_MAX: 'Password maksimal 72 karakter',
         PASSWORD_PATTERN: 'Password harus mengandung huruf dan angka',
+
+        // Password Lama
+        PASSWORD_LAMA_REQUIRED: 'Password lama wajib diisi',
+
+        // Password Baru
+        PASSWORD_BARU_REQUIRED: 'Password baru wajib diisi',
+        PASSWORD_BARU_MIN: 'Password baru minimal 6 karakter',
+        PASSWORD_BARU_MAX: 'Password maksimal 72 karakter',
+        PASSWORD_BARU_PATTERN: 'Password baru harus mengandung huruf dan angka',
+        PASSWORD_BARU_SAME: 'Password baru tidak boleh sama dengan password lama',
+
+        // Konfirmasi Password Baru
+        KONFIRMASI_PASSWORD_REQUIRED: 'Konfirmasi password baru wajib diisi',
+        KONFIRMASI_PASSWORD_NOT_MATCH: 'Konfirmasi password baru tidak cocok',
         
         // Nama
         NAMA_REQUIRED: 'Nama wajib diisi',
@@ -87,3 +105,4 @@ module.exports = {
         JURUSAN_INVALID: 'Jurusan tidak tersedia dalam daftar'
     }
 };
+
