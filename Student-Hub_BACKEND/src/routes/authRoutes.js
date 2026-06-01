@@ -1,8 +1,9 @@
 const { body } = require('express-validator');
 const express = require('express');
 const constants = require('../constants/constants');
-const { register, login } = require('../controllers/authController');
+const { register, login, changePassword } = require('../controllers/authController');
 const router = express.Router();
+const { authMiddleware } = require('../middlewares/authMiddleware');
 
 const registerValidation = [
     body('nim')
@@ -108,7 +109,7 @@ const changePasswordValidation = [
             return true;
         }),
         body('konfirmasiPassword')
-        .notEmpty().withMessage(config.MESSAGES.KONFIRMASI_PASSWORD_REQUIRED)
+        .notEmpty().withMessage(constants.MESSAGES.KONFIRMASI_PASSWORD_REQUIRED)
         .custom((value, {req}) => {
             if(value !== req.body.passwordBaru){
                 throw new Error(constants.MESSAGES.KONFIRMASI_PASSWORD_NOT_MATCH);
@@ -119,6 +120,6 @@ const changePasswordValidation = [
 
 router.post('/register', registerValidation, register);
 router.post('/login',  loginValidation, login);
-router.put('/change-password', changePasswordValidation)
+router.put('/change-password', authMiddleware, changePasswordValidation, changePassword)
 
 module.exports = router;
