@@ -2,7 +2,7 @@ const { validationResult, matchedData } = require('express-validator');
 const prisma = require('../../prisma/prisma');
 const { hashPassword } = require('../utils/hashHelper');
 const { generateToken } = require('../utils/jwtHelper');
-const { verifyPassword } = require('../utils/hashHelper'); 
+const { verifyPassword } = require('../utils/hashHelper');
 
 async function register(req, res){
     try {
@@ -38,7 +38,7 @@ async function register(req, res){
             });
         }
     
-        const hashedPassword = await hashPassword(password)
+        const hashedPassword = await hashPassword(password);
     
         //simpan ke databases
         const newUser = await prisma.user.create({
@@ -123,9 +123,60 @@ async function login(req, res){
     }
 }
 
+async function changePassword(req, res){
+    try {
+        //validasi input changePassword
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                message: errors.array()[0].msg
+            })
+        }
+
+        const { oldPassword, newPassword} = matchedData(req);
+
+        //mencari user berdasarkan nim
+        const user = await prisma.user.findUnique({
+            where: {nim: req.user.nim }
+        });
+        
+        if(!user){
+            return res.status(404).json({
+                message: "NIM Tidak dikenali"
+            });
+        }
+
+        //verifikasi oldPassword dengan newPassword
+        const isPasswordValid = await validationResult(oldPassword, user.password_hash);
+        if(!isPasswordValid){
+            return res.status(401).json({
+                message: "Password lama salah!"
+            });
+        }
+
+        //hashPassword
+        const hashedPassword = await hashPassword(oldPassword);
+
+        //update
+        const updateUser = await prisma.user.update({
+            where: {nim: req.user.nim},
+            data: { password_hash: hashedPassword}
+        })
+        res.status(201).json({
+            'success': true,
+            'message': 'Password berhasil diubah'
+        });   
+    } catch (error){
+        console.error(error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan pada server'
+        });
+    }
+}
 
 
 module.exports = {
      register,
-     login
+     login,
+     changePassword
 }
