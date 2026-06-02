@@ -147,7 +147,7 @@ async function changePassword(req, res){
         }
 
         //verifikasi oldPassword dengan newPassword
-        const isPasswordValid = await validationResult(oldPassword, user.password_hash);
+        const isPasswordValid = await verifyPassword(oldPassword, user.password_hash);
         if(!isPasswordValid){
             return res.status(401).json({
                 message: "Password lama salah!"
@@ -155,7 +155,7 @@ async function changePassword(req, res){
         }
 
         //hashPassword
-        const hashedPassword = await hashPassword(oldPassword);
+        const hashedPassword = await hashPassword(newPassword);
 
         //update
         const updateUser = await prisma.user.update({
@@ -180,3 +180,8 @@ module.exports = {
      login,
      changePassword
 }
+
+// //debug 
+// console.log('DEBUG VERIFY:', { oldPassword, passwordHash: user?.password_hash });
+
+// const isPasswordValid = await verifyPassword(oldPassword, user.password_hash);
