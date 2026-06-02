@@ -94,24 +94,23 @@ const loginValidation = [
 ];
 
 const changePasswordValidation = [
-        body('passwordLama')
+    body('oldPassword')
         .notEmpty().withMessage(constants.MESSAGES.PASSWORD_LAMA_REQUIRED),
-        body('passwordBaru')
+    body('newPassword')
         .notEmpty().withMessage(constants.MESSAGES.PASSWORD_BARU_REQUIRED)
         .isLength({ min: constants.VALIDATION.PASSWORD_BARU.MIN_LENGTH }).withMessage(constants.MESSAGES.PASSWORD_BARU_MIN)
         .isLength({ max: constants.VALIDATION.PASSWORD_BARU.MAX_LENGTH }).withMessage(constants.MESSAGES.PASSWORD_BARU_MAX)
         .matches(constants.REGEX.PASSWORD).withMessage(constants.MESSAGES.PASSWORD_BARU_PATTERN)
-        .custom((value, {req}) =>{
-            //Memastikan password lama tidak sama dengan password baru
-            if(value === req.body.passwordLama){
-                throw new Error(constants.MESSAGES.KONFIRMASI_PASSWORD_NOT_MATCH)
+        .custom((value, { req }) => {
+            if (value === req.body.oldPassword) {
+                throw new Error(constants.MESSAGES.PASSWORD_BARU_SAME);
             }
             return true;
         }),
-        body('konfirmasiPassword')
+    body('konfirmasi_Password')
         .notEmpty().withMessage(constants.MESSAGES.KONFIRMASI_PASSWORD_REQUIRED)
-        .custom((value, {req}) => {
-            if(value !== req.body.passwordBaru){
+        .custom((value, { req }) => {
+            if (value !== req.body.newPassword) {
                 throw new Error(constants.MESSAGES.KONFIRMASI_PASSWORD_NOT_MATCH);
             }
             return true;
