@@ -1,7 +1,7 @@
 module.exports = {
     REGEX: {
         NIM: /^\d{9,10}$/,                       // 9-10 digit angka, dari awal sampai akhir
-        PASSWORD: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, // minimal 6, huruf+angka
+        PASSWORD: /^(?=.*[A-Za-z])(?=.*\d).{6,}$/, // minimal 6, huruf+angka
         NAMA: /^[A-Za-z\s]{3,}$/,                // minimal 3, huruf dan spasi
         ALAMAT: /^[A-Za-z0-9\s,.-]{5,}$/,        // minimal 5, alamat umum
         TANGGAL_LAHIR: /^\d{4}-\d{2}-\d{2}$/,    // format YYYY-MM-DD
