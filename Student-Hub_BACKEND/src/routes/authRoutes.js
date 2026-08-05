@@ -3,7 +3,7 @@ const express = require('express');
 const constants = require('../constants/constants');
 const { register, login, changePassword } = require('../controllers/authController');
 const router = express.Router();
-const { authMiddleware } = require('../middlewares/authMiddleware');
+const { authenticateToken } = require('../middlewares/authMiddleware');
 
 const registerValidation = [
     body('nim')
@@ -119,6 +119,6 @@ const changePasswordValidation = [
 
 router.post('/register', registerValidation, register);
 router.post('/login',  loginValidation, login);
-router.put('/change-password', authMiddleware, changePasswordValidation, changePassword)
+router.put('/change-password', authenticateToken, changePasswordValidation, changePassword)
 
 module.exports = router;
